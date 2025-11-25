@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Avocats Partenaires - MyLeo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .breadcrumb {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .breadcrumb a {
+            color: #1e3a8a;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .lawyer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .lawyer-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #1e3a8a;
+        }
+
+        .lawyer-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+
+        .lawyer-bar {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .lawyer-actions {
+            font-size: 0.85rem;
+            color: #374151;
+        }
+
+        .actions-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0;
+        }
+
+        .actions-list li {
+            padding: 0.2rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .actions-list li:last-child {
+            border-bottom: none;
+        }
+
+        .context-info {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .context-info h4 {
+            margin: 0 0 0.5rem 0;
+            color: #92400e;
+        }
+
+        .url-display {
+            font-family: monospace;
+            background: #f3f4f6;
+            padding: 0.5rem;
+            border-radius: 4px;
+            word-break: break-all;
+        }
+
+        .test-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .test-btn {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .test-btn:hover {
+            background: #1e40af;
+        }
+
+        .detection-result {
+            background: #dcfce7;
+            border: 1px solid #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .detection-result h4 {
+            margin: 0 0 0.5rem 0;
+            color: #065f46;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏛️ Nos Avocats Partenaires</h1>
+        <p>Découvrez nos avocats experts en actions collectives</p>
+    </div>
+
+    <div class="breadcrumb">
+        <a href="/">MyLeo</a> > <a href="/fr">FR</a> > <a href="/fr/page">Page</a> > <strong>Nos Avocats Partenaires</strong>
+    </div>
+
+    <div class="container">
+        <div class="context-info">
+            <h4>🎯 Test de Détection Automatique de Rubrique</h4>
+            <p>Cette page simule la structure de <strong>https://myleo.legal/fr/page/nos-avocats-partenaires</strong></p>
+            <div class="url-display" id="current-url"></div>
+            
+            <div class="test-buttons">
+                <a href="?rubrique=produit" class="test-btn">🔬 Mode Produit</a>
+                <a href="?rubrique=compte_client" class="test-btn">👤 Mode Compte Client</a>
+                <a href="?rubrique=tunnel_vente" class="test-btn">💰 Mode Tunnel Vente</a>
+                <a href="?" class="test-btn">🏠 Mode Général</a>
+            </div>
+        </div>
+
+        <div class="detection-result" id="detection-info">
+            <h4>🤖 Résultat de la Détection Automatique</h4>
+            <div id="detection-details">Chargement...</div>
+        </div>
+
+        <div class="content">
+            <h2>Nos Avocats Partenaires</h2>
+            <p>Nos avocats sont sélectionnés en raison de leur compétence, de leur expérience et de leur force de travail mais aussi en raison du partage des valeurs et des principes affirmés dans notre Manifeste.</p>
+
+            <div class="lawyer-grid">
+                <div class="lawyer-card">
+                    <div class="lawyer-name">Christophe LÈGUEVAQUES</div>
+                    <div class="lawyer-bar">Avocat au barreau de PARIS - Docteur en Droit</div>
+                    <div class="lawyer-actions">
+                        <strong>Avocat des actions :</strong>
+                        <ul class="actions-list">
+                            <li>Chlordécone</li>
+                            <li>Levothyrox c./ ANSM</li>
+                            <li>Levothyrox c./ Merck</li>
+                            <li>Linky</li>
+                            <li>Motorgate - Casse moteur</li>
+                            <li>Uber Eats</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lawyer-card">
+                    <div class="lawyer-name">Romain SINTÈS</div>
+                    <div class="lawyer-bar">Avocat au barreau de TOULOUSE</div>
+                    <div class="lawyer-actions">
+                        <strong>Avocat des actions :</strong>
+                        <ul class="actions-list">
+                            <li>Essure</li>
+                            <li>Levothyrox c./ ANSM</li>
+                            <li>Levothyrox c./ Merck</li>
+                            <li>Androcur</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lawyer-card">
+                    <div class="lawyer-name">David NABET-MARTIN</div>
+                    <div class="lawyer-bar">Avocat au barreau de TOULOUSE</div>
+                    <div class="lawyer-actions">
+                        <strong>Avocat des actions :</strong>
+                        <ul class="actions-list">
+                            <li>Chlordécone</li>
+                            <li>Levothyrox c./ Merck</li>
+                            <li>Linky</li>
+                            <li>Tarbes Intègre</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lawyer-card">
+                    <div class="lawyer-name">Charles CONSTANTIN-VALLET</div>
+                    <div class="lawyer-bar">Avocat au barreau de PARIS - Docteur en droit et Professeur</div>
+                    <div class="lawyer-actions">
+                        <strong>Avocat de l'action :</strong>
+                        <ul class="actions-list">
+                            <li>Dieselgate c./ Volkswagen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Display current URL
+        document.getElementById('current-url').textContent = window.location.href;
+
+        // Function to update detection info
+        function updateDetectionInfo() {
+            // This will be populated by the widget's detection logic
+            const detectionDiv = document.getElementById('detection-details');
+            
+            setTimeout(() => {
+                // Get the detected configuration from the widget
+                if (window.myleoChatWidget && window.WIDGET_CONFIG) {
+                    detectionDiv.innerHTML = `
+                        <strong>🏷️ Rubrique détectée :</strong> <code>${window.WIDGET_CONFIG.rubrique}</code><br>
+                        <strong>📦 Code produit :</strong> <code>${window.WIDGET_CONFIG.productCode || 'Aucun'}</code><br>
+                        <strong>🌐 Langue :</strong> <code>${window.WIDGET_CONFIG.language}</code><br>
+                        <strong>🔗 URL analysée :</strong> <code>${window.location.pathname}</code><br>
+                        <strong>📊 Paramètres URL :</strong> <code>${window.location.search || 'Aucun'}</code>
+                    `;
+                } else {
+                    detectionDiv.innerHTML = '⏳ Widget en cours de chargement...';
+                }
+            }, 1000);
+        }
+
+        // Update detection info when page loads
+        window.addEventListener('load', updateDetectionInfo);
+        
+        // Update when widget is ready
+        document.addEventListener('myleoWidgetReady', updateDetectionInfo);
+    </script>
+
+    <!-- MyLeo Chatbot Configuration -->
+    <script>
+        window.MyleoWidgetConfig = {
+            apiUrl: 'http://localhost:3000/api',
+            language: 'fr',
+            // rubrique will be auto-detected from URL
+            // productCode will be auto-detected from URL
+            theme: 'myleo',
+            position: 'bottom-right'
+        };
+    </script>
+
+    <!-- Load MyLeo Chatbot Widget -->
+    <script src="http://localhost:3000/widget.js"></script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte - MyLeo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .breadcrumb {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .breadcrumb a {
+            color: #059669;
+            text-decoration: none;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+
+        .main-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .detection-result {
+            background: #dcfce7;
+            border: 1px solid #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            grid-column: 1 / -1;
+        }
+
+        .detection-result h4 {
+            margin: 0 0 0.5rem 0;
+            color: #065f46;
+        }
+
+        .nav-item {
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f0fdf4;
+        }
+
+        .nav-item.active {
+            background: #dcfce7;
+            color: #065f46;
+            font-weight: 600;
+        }
+
+        .action-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #059669;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>👤 Mon Compte MyLeo</h1>
+        <p>Gérez vos actions collectives et suivez vos dossiers</p>
+    </div>
+
+    <div class="breadcrumb">
+        <a href="/">MyLeo</a> > <strong>Mon Compte</strong>
+    </div>
+
+    <div class="container">
+        <div class="detection-result" id="detection-info">
+            <h4>🤖 Détection Automatique - Espace Client</h4>
+            <div id="detection-details">Chargement...</div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="sidebar">
+                <h3>📋 Navigation</h3>
+                <div class="nav-item active">🏠 Tableau de bord</div>
+                <div class="nav-item">⚖️ Mes Actions</div>
+                <div class="nav-item">📄 Mes Documents</div>
+                <div class="nav-item">💬 Messages</div>
+                <div class="nav-item">👤 Mon Profil</div>
+                <div class="nav-item">🔧 Paramètres</div>
+                <div class="nav-item">❓ Aide</div>
+            </div>
+
+            <div class="main-content">
+                <h2>🏠 Tableau de bord</h2>
+                <p>Bienvenue dans votre espace personnel MyLeo. Vous pouvez ici suivre l'avancement de vos actions collectives et gérer vos informations.</p>
+
+                <h3>⚖️ Mes Actions Collectives</h3>
+                
+                <div class="action-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4>Action Chlordécone</h4>
+                        <span class="status-badge status-active">Active</span>
+                    </div>
+                    <p>Action collective contre l'État français pour le scandale du chlordécone aux Antilles.</p>
+                    <small>Inscrit le : 15 mars 2024</small>
+                </div>
+
+                <div class="action-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4>Action Levothyrox</h4>
+                        <span class="status-badge status-pending">En attente</span>
+                    </div>
+                    <p>Action collective contre Merck pour les effets indésirables de la nouvelle formule Levothyrox.</p>
+                    <small>Inscrit le : 8 février 2024</small>
+                </div>
+
+                <h3>📊 Statistiques</h3>
+                <ul>
+                    <li><strong>Actions rejointes :</strong> 2</li>
+                    <li><strong>Documents téléchargés :</strong> 5</li>
+                    <li><strong>Messages non lus :</strong> 1</li>
+                    <li><strong>Dernière connexion :</strong> Aujourd'hui</li>
+                </ul>
+
+                <h3>📢 Actualités</h3>
+                <ul>
+                    <li>🎉 <strong>Victoire !</strong> La Cour administrative d'appel de Paris a rendu sa décision favorable dans l'affaire Chlordécone</li>
+                    <li>📄 Nouveaux documents disponibles pour l'action Levothyrox</li>
+                    <li>⏰ Rappel : Date limite pour fournir vos pièces complémentaires - 30 novembre 2024</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateDetectionInfo() {
+            const detectionDiv = document.getElementById('detection-details');
+            
+            setTimeout(() => {
+                if (window.WIDGET_CONFIG) {
+                    detectionDiv.innerHTML = `
+                        <strong>🏷️ Rubrique détectée :</strong> <code>${window.WIDGET_CONFIG.rubrique}</code><br>
+                        <strong>📦 Code produit :</strong> <code>${window.WIDGET_CONFIG.productCode || 'Aucun'}</code><br>
+                        <strong>🌐 Langue :</strong> <code>${window.WIDGET_CONFIG.language}</code><br>
+                        <strong>🔗 URL analysée :</strong> <code>${window.location.pathname}</code><br>
+                        <strong>📊 Paramètres URL :</strong> <code>${window.location.search || 'Aucun'}</code><br>
+                        <strong>🎯 Détection :</strong> <em>Cette page devrait être détectée comme "compte_client"</em>
+                    `;
+                } else {
+                    detectionDiv.innerHTML = '⏳ Widget en cours de chargement...';
+                }
+            }, 1000);
+        }
+
+        window.addEventListener('load', updateDetectionInfo);
+        document.addEventListener('myleoWidgetReady', updateDetectionInfo);
+    </script>
+
+    <!-- MyLeo Chatbot Configuration -->
+    <script>
+        window.MyleoWidgetConfig = {
+            apiUrl: 'http://localhost:3000/api',
+            language: 'fr',
+            theme: 'myleo',
+            position: 'bottom-right'
+        };
+    </script>
+
+    <!-- Load MyLeo Chatbot Widget -->
+    <script src="http://localhost:3000/widget.js"></script>
+</body>
+</html>

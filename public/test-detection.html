@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Détection Automatique - MyLeo Chatbot</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .test-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #1e3a8a;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .test-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-card h3 {
+            margin: 0 0 1rem 0;
+            color: #1e3a8a;
+            font-size: 1.3rem;
+        }
+
+        .test-card p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+
+        .test-button {
+            background: #1e3a8a;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .test-button:hover {
+            background: #1e40af;
+        }
+
+        .rubrique-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .badge-general {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .badge-produit {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-compte {
+            background: #dcfce7;
+            color: #065f46;
+        }
+
+        .badge-tunnel {
+            background: #fce7f3;
+            color: #be185d;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #3b82f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .info-box h3 {
+            margin: 0 0 1rem 0;
+            color: #1e40af;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: "✅ ";
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 Test de Détection Automatique</h1>
+        <p>MyLeo Chatbot - Détection intelligente de rubrique basée sur l'URL</p>
+    </div>
+
+    <div class="container">
+        <div class="info-box">
+            <h3>🎯 Comment fonctionne la détection automatique ?</h3>
+            <p>Le widget MyLeo analyse automatiquement l'URL de la page pour déterminer la rubrique appropriée et le code produit. Cela permet de contextualiser les réponses du chatbot selon le contenu de la page.</p>
+            
+            <ul class="feature-list">
+                <li><strong>Détection de rubrique :</strong> Analyse des mots-clés dans l'URL pour identifier le contexte (général, produit, compte client, tunnel de vente)</li>
+                <li><strong>Détection de produit :</strong> Identification automatique des codes produits basés sur les actions collectives MyLeo</li>
+                <li><strong>Configuration flexible :</strong> Possibilité de surcharger la détection via la configuration manuelle</li>
+                <li><strong>Logging détaillé :</strong> Informations de débogage dans la console du navigateur</li>
+            </ul>
+        </div>
+
+        <h2>🧪 Pages de Test</h2>
+        <p>Cliquez sur les liens ci-dessous pour tester la détection automatique sur différents types de pages :</p>
+
+        <div class="test-grid">
+            <div class="test-card">
+                <span class="rubrique-badge badge-general">Général</span>
+                <h3>🏛️ Nos Avocats Partenaires</h3>
+                <p>Page d'information générale présentant les avocats partenaires de MyLeo. Devrait être détectée comme rubrique "general".</p>
+                <a href="/fr/page/nos-avocats-partenaires" class="test-button">Tester la Détection</a>
+            </div>
+
+            <div class="test-card">
+                <span class="rubrique-badge badge-produit">Produit</span>
+                <h3>⚖️ Action Chlordécone</h3>
+                <p>Page d'une action collective spécifique. Devrait être détectée comme rubrique "produit" avec le code "CHLORDECONE_2024".</p>
+                <a href="/action/chlordecone" class="test-button">Tester la Détection</a>
+            </div>
+
+            <div class="test-card">
+                <span class="rubrique-badge badge-compte">Compte Client</span>
+                <h3>👤 Mon Compte</h3>
+                <p>Espace client personnel pour gérer ses actions et dossiers. Devrait être détectée comme rubrique "compte_client".</p>
+                <a href="/compte" class="test-button">Tester la Détection</a>
+            </div>
+
+            <div class="test-card">
+                <span class="rubrique-badge badge-general">Général (Demo)</span>
+                <h3>🎮 Page Demo Originale</h3>
+                <p>Page de démonstration originale du chatbot. Configuration par défaut avec rubrique "general".</p>
+                <a href="/demo.html" class="test-button">Tester la Détection</a>
+            </div>
+
+            <div class="test-card">
+                <span class="rubrique-badge badge-produit">Produit (Param)</span>
+                <h3>🔗 Test avec Paramètres URL</h3>
+                <p>Test de détection avec paramètres d'URL explicites pour forcer une rubrique et un code produit.</p>
+                <a href="/demo.html?product=LEVOTHYROX_MERCK&rubrique=produit" class="test-button">Tester la Détection</a>
+            </div>
+
+            <div class="test-card">
+                <span class="rubrique-badge badge-tunnel">Tunnel de Vente</span>
+                <h3>💰 Simulation Tunnel</h3>
+                <p>Simulation d'une page de tunnel de vente (abonnement, tarifs). Devrait être détectée comme "tunnel_vente".</p>
+                <a href="/demo.html?page=abonnement&action=souscrire" class="test-button">Tester la Détection</a>
+            </div>
+        </div>
+
+        <div class="info-box" style="margin-top: 3rem;">
+            <h3>🔍 Comment vérifier la détection ?</h3>
+            <p>Sur chaque page de test, vous verrez :</p>
+            <ul class="feature-list">
+                <li><strong>Console du navigateur :</strong> Ouvrez les outils de développement (F12) pour voir les logs détaillés de détection</li>
+                <li><strong>Zone de résultat :</strong> Chaque page affiche la configuration détectée dans une zone dédiée</li>
+                <li><strong>Widget chatbot :</strong> Le chatbot s'adapte automatiquement au contexte détecté</li>
+                <li><strong>Configuration globale :</strong> L'objet <code>window.WIDGET_CONFIG</code> contient la configuration finale</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- MyLeo Chatbot Configuration -->
+    <script>
+        window.MyleoWidgetConfig = {
+            apiUrl: 'http://localhost:3000/api',
+            language: 'fr',
+            theme: 'myleo',
+            position: 'bottom-right'
+        };
+    </script>
+
+    <!-- Load MyLeo Chatbot Widget -->
+    <script src="http://localhost:3000/widget.js"></script>
+</body>
+</html>

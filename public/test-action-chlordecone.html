@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Collective Chlordécone - MyLeo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .breadcrumb {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .breadcrumb a {
+            color: #dc2626;
+            text-decoration: none;
+        }
+
+        .content {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .action-info {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .detection-result {
+            background: #dcfce7;
+            border: 1px solid #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .detection-result h4 {
+            margin: 0 0 0.5rem 0;
+            color: #065f46;
+        }
+
+        .cta-button {
+            background: #dc2626;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 1rem 0;
+        }
+
+        .cta-button:hover {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚖️ Action Collective Chlordécone</h1>
+        <p>Défendons ensemble les victimes du scandale du Chlordécone</p>
+    </div>
+
+    <div class="breadcrumb">
+        <a href="/">MyLeo</a> > <a href="/actions">Actions Collectives</a> > <strong>Chlordécone</strong>
+    </div>
+
+    <div class="container">
+        <div class="detection-result" id="detection-info">
+            <h4>🤖 Détection Automatique - Page Produit</h4>
+            <div id="detection-details">Chargement...</div>
+        </div>
+
+        <div class="content">
+            <h2>Action Collective Chlordécone</h2>
+            
+            <div class="action-info">
+                <h3>🏝️ Le Scandale du Chlordécone aux Antilles</h3>
+                <p>Le chlordécone est un pesticide organochloré utilisé massivement aux Antilles françaises de 1972 à 1993 pour lutter contre le charançon du bananier. Malgré l'interdiction aux États-Unis dès 1976 pour sa dangerosité, son utilisation s'est poursuivie pendant 17 années supplémentaires en Martinique et en Guadeloupe.</p>
+                
+                <p><strong>Conséquences sanitaires :</strong></p>
+                <ul>
+                    <li>Contamination des sols pour plusieurs siècles</li>
+                    <li>Pollution des eaux et de la chaîne alimentaire</li>
+                    <li>Augmentation des cancers de la prostate</li>
+                    <li>Troubles du développement chez l'enfant</li>
+                    <li>Perturbations endocriniennes</li>
+                </ul>
+            </div>
+
+            <h3>📋 Qui peut rejoindre cette action ?</h3>
+            <ul>
+                <li>Toute personne ayant vécu en Martinique ou Guadeloupe</li>
+                <li>Les victimes de pathologies liées au chlordécone</li>
+                <li>Les familles des victimes décédées</li>
+                <li>Les professionnels exposés (agriculteurs, ouvriers...)</li>
+            </ul>
+
+            <a href="#" class="cta-button">🚀 Rejoindre l'Action Collective</a>
+
+            <h3>👥 Nos Avocats</h3>
+            <p>Cette action est portée par :</p>
+            <ul>
+                <li><strong>Me Christophe LÈGUEVAQUES</strong> - Avocat au barreau de Paris</li>
+                <li><strong>Me David NABET-MARTIN</strong> - Avocat au barreau de Toulouse</li>
+                <li><strong>Me Laurie CASTANET</strong> - Avocat au barreau de Toulouse</li>
+                <li><strong>Me Pierre DELIVRET</strong> - Avocat au barreau de Toulouse</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Display current URL and update detection info
+        function updateDetectionInfo() {
+            const detectionDiv = document.getElementById('detection-details');
+            
+            setTimeout(() => {
+                if (window.WIDGET_CONFIG) {
+                    detectionDiv.innerHTML = `
+                        <strong>🏷️ Rubrique détectée :</strong> <code>${window.WIDGET_CONFIG.rubrique}</code><br>
+                        <strong>📦 Code produit :</strong> <code>${window.WIDGET_CONFIG.productCode || 'Aucun'}</code><br>
+                        <strong>🌐 Langue :</strong> <code>${window.WIDGET_CONFIG.language}</code><br>
+                        <strong>🔗 URL analysée :</strong> <code>${window.location.pathname}</code><br>
+                        <strong>📊 Paramètres URL :</strong> <code>${window.location.search || 'Aucun'}</code><br>
+                        <strong>🎯 Détection :</strong> <em>Cette page devrait être détectée comme "produit" avec le code "CHLORDECONE_2024"</em>
+                    `;
+                } else {
+                    detectionDiv.innerHTML = '⏳ Widget en cours de chargement...';
+                }
+            }, 1000);
+        }
+
+        window.addEventListener('load', updateDetectionInfo);
+        document.addEventListener('myleoWidgetReady', updateDetectionInfo);
+    </script>
+
+    <!-- MyLeo Chatbot Configuration -->
+    <script>
+        window.MyleoWidgetConfig = {
+            apiUrl: 'http://localhost:3000/api',
+            language: 'fr',
+            // rubrique et productCode seront auto-détectés
+            theme: 'myleo',
+            position: 'bottom-right'
+        };
+    </script>
+
+    <!-- Load MyLeo Chatbot Widget -->
+    <script src="http://localhost:3000/widget.js"></script>
+</body>
+</html>

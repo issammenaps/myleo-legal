@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyLeo Chatbot Demo - Test de l'Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .demo-section {
+            margin-bottom: 2rem;
+        }
+
+        .demo-section h2 {
+            color: #1e3a8a;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .demo-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #1e3a8a;
+        }
+
+        .demo-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-card p {
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: transform 0.2s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #dcfce7;
+            color: #166534;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .instructions {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .instructions h3 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+
+        .instructions ul {
+            margin-left: 1.5rem;
+            color: #92400e;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #1e3a8a;
+            font-size: 18px;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 2rem;
+            }
+
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">ML</div>
+            <h1>Assistant MyLeo</h1>
+            <p>Démonstration de l'assistant intelligent pour MyLeo.legal</p>
+        </div>
+
+        <div class="content">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                Assistant prêt et en ligne
+            </div>
+
+            <div class="instructions">
+                <h3>💡 Instructions de test</h3>
+                <ul>
+                    <li>Cliquez sur l'icône de chat en bas à droite pour ouvrir l'assistant</li>
+                    <li>Testez différentes questions comme "Comment contacter le support ?" ou "Quels sont vos horaires
+                        ?"</li>
+                    <li>Essayez la fonction d'escalation vers Zendesk si aucune réponse ne vous convient</li>
+                    <li>L'assistant supporte le français et l'anglais</li>
+                </ul>
+            </div>
+
+            <div class="demo-section">
+                <h2>🎯 Contextes de test</h2>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <h3>Page Générale</h3>
+                        <p>Assistant configuré pour un contexte général sans produit spécifique.</p>
+                        <button class="demo-button" data-action="update-config" data-rubrique="general" data-product=""
+                            data-language="fr">
+                            Tester le mode général
+                        </button>
+                    </div>
+
+                    <div class="demo-card">
+                        <h3>Page Produit</h3>
+                        <p>Assistant avec contexte produit pour des questions spécialisées.</p>
+                        <button class="demo-button" data-action="update-config" data-rubrique="produit"
+                            data-product="PRODUCT_123" data-language="fr">
+                            Tester le mode produit
+                        </button>
+                    </div>
+
+                    <div class="demo-card">
+                        <h3>Compte Client</h3>
+                        <p>Assistant pour l'espace client avec questions sur les comptes.</p>
+                        <button class="demo-button" data-action="update-config" data-rubrique="compte_client"
+                            data-product="" data-language="fr">
+                            Tester le compte client
+                        </button>
+                    </div>
+
+                    <div class="demo-card">
+                        <h3>Tunnel de Vente</h3>
+                        <p>Assistant pour accompagner les clients dans leur parcours d'achat.</p>
+                        <button class="demo-button" data-action="update-config" data-rubrique="tunnel_vente"
+                            data-product="" data-language="fr">
+                            Tester le tunnel de vente
+                        </button>
+                    </div>
+
+                    <div class="demo-card">
+                        <h3>Version Anglaise</h3>
+                        <p>Test de l'assistant avec l'interface en anglais.</p>
+                        <button class="demo-button" data-action="update-config" data-rubrique="general" data-product=""
+                            data-language="en">
+                            Test English Version
+                        </button>
+                    </div>
+
+                    <div class="demo-card">
+                        <h3>Support Technique</h3>
+                        <p>Simulation d'un besoin de support avec escalation possible.</p>
+                        <button class="demo-button" data-action="simulate-support">
+                            Simuler une demande
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h2>📊 Informations techniques</h2>
+                <div
+                    style="background: #f3f4f6; padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.9rem;">
+                    <strong>Configuration actuelle :</strong><br>
+                    API URL: <span id="current-api">http://localhost:3000/api</span><br>
+                    Langue: <span id="current-lang">fr</span><br>
+                    Rubrique: <span id="current-rubrique">general</span><br>
+                    Code Produit: <span id="current-product">null</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 MyLeo.legal - Assistant intelligent pour l'accès à la justice</p>
+        </div>
+    </div>
+
+    <!-- MyLeo Chatbot Configuration -->
+    <script>
+        // Configuration initiale du widget
+        window.MyleoWidgetConfig = {
+            apiUrl: 'http://localhost:3000/api',
+            language: 'en',
+            rubrique: 'general',
+            productCode: null,
+            theme: 'myleo',
+            position: 'bottom-right'
+        };
+
+        // Fonction pour mettre à jour la configuration du widget
+        function updateWidgetConfig(rubrique, productCode, language) {
+            // Mettre à jour la configuration
+            window.MyleoWidgetConfig.rubrique = rubrique;
+            window.MyleoWidgetConfig.productCode = productCode;
+            window.MyleoWidgetConfig.language = language;
+
+            // Mettre à jour l'affichage
+            updateConfigDisplay();
+
+            // Informer l'utilisateur
+            showNotification(`Configuration mise à jour : ${rubrique.replace('_', ' ')} (${language.toUpperCase()})`);
+
+            // Redémarrer le widget si nécessaire
+            if (window.myleoChatWidget) {
+                console.log('Widget reconfiguré:', window.MyleoWidgetConfig);
+            }
+        }
+
+        function updateConfigDisplay() {
+            document.getElementById('current-api').textContent = window.MyleoWidgetConfig.apiUrl;
+            document.getElementById('current-lang').textContent = window.MyleoWidgetConfig.language;
+            document.getElementById('current-rubrique').textContent = window.MyleoWidgetConfig.rubrique;
+            document.getElementById('current-product').textContent = window.MyleoWidgetConfig.productCode || 'null';
+        }
+
+        function simulateSupportRequest() {
+            showNotification('Ouvrez l\'assistant et tapez "Je n\'arrive pas à résoudre mon problème" pour tester l\'escalation Zendesk');
+
+            // Ouvrir automatiquement le widget si disponible
+            if (window.myleoChatWidget && !window.myleoChatWidget.isOpen) {
+                setTimeout(() => {
+                    window.myleoChatWidget.openWidget();
+                }, 1000);
+            }
+        }
+
+        function showNotification(message) {
+            // Créer une notification temporaire
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                z-index: 10001;
+                font-size: 0.9rem;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                animation: slideInRight 0.3s ease-out;
+            `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            // Supprimer après 3 secondes
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-in';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Ajouter les animations CSS pour les notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Event listeners pour les boutons (remplace les handlers onclick inline)
+        function setupEventListeners() {
+            // Gestionnaire pour les boutons de configuration
+            document.querySelectorAll('[data-action="update-config"]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const rubrique = e.target.dataset.rubrique;
+                    const product = e.target.dataset.product || null;
+                    const language = e.target.dataset.language;
+                    updateWidgetConfig(rubrique, product, language);
+                });
+            });
+
+            // Gestionnaire pour le bouton de simulation de support
+            document.querySelectorAll('[data-action="simulate-support"]').forEach(button => {
+                button.addEventListener('click', simulateSupportRequest);
+            });
+        }
+
+        // Initialiser l'affichage de la configuration
+        window.addEventListener('load', () => {
+            updateConfigDisplay();
+            setupEventListeners(); // Configurer les event listeners
+
+            // Vérifier si le service est disponible
+            fetch('http://localhost:3000/health')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Service chatbot disponible:', data);
+                })
+                .catch(error => {
+                    console.warn('Service chatbot non disponible. Assurez-vous que le serveur est démarré avec "npm run dev"');
+                    showNotification('⚠️ Service non disponible. Démarrez le serveur avec "npm run dev"');
+                });
+        });
+    </script>
+
+    <!-- Charger le widget MyLeo -->
+    <script src="http://localhost:3000/widget.js"></script>
+</body>
+
+</html>
