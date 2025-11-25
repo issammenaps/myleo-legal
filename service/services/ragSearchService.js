@@ -182,20 +182,87 @@ class RagSearchService {
   }
 
   async searchFallback(query, filters) {
-    try {
-      const fallbackFilters = {
-        ...filters,
-        limit: Math.min(filters.limit || this.config.maxCandidatesPerVariant, this.config.fallbackLimit)
-      };
-      return await this.database.searchFaqContent(query, fallbackFilters);
-    } catch (error) {
-      this.logger?.logError?.(error, {
-        action: 'rag_search_fallback',
-        query,
-        filters
-      });
-      return null;
+    const fallbackFilters = this.buildFallbackFilterVariants(filters);
+    const limitOverride = Math.min(filters.limit || this.config.maxCandidatesPerVariant, this.config.fallbackLimit);
+
+    for (const variant of fallbackFilters) {
+      try {
+        const variantFilters = {
+          ...variant,
+          limit: limitOverride
+        };
+        const results = await this.database.searchFaqContent(query, variantFilters);
+        if (results && results.length > 0) {
+          return results;
+        }
+      } catch (error) {
+        this.logger?.logError?.(error, {
+          action: 'rag_search_fallback',
+          query,
+          filters: variant
+        });
+      }
     }
+
+    return null;
+  }
+
+  buildFallbackFilterVariants(filters) {
+    const normalized = this.normalizeFilters(filters);
+    const variants = [];
+
+    const pushVariant = (variant) => {
+      const key = JSON.stringify(variant);
+      if (!variants.some(entry => entry.__key === key)) {
+        variants.push({ ...variant, __key: key });
+      }
+    };
+
+    pushVariant(normalized);
+
+    if (normalized.productRef) {
+      const { productRef, ...rest } = normalized;
+      pushVariant(rest);
+    }
+
+    if (normalized.rubrique) {
+      const variant = { ...normalized };
+      delete variant.rubrique;
+      pushVariant(variant);
+    }
+
+    const noProductNoRubrique = { ...normalized };
+    delete noProductNoRubrique.productRef;
+    delete noProductNoRubrique.rubrique;
+    pushVariant(noProductNoRubrique);
+
+    pushVariant({
+      languageCode: normalized.languageCode,
+      limit: normalized.limit
+    });
+
+    pushVariant({
+      limit: normalized.limit
+    });
+
+    return variants.map(({ __key, ...variant }) => variant);
+  }
+
+  normalizeFilters(filters = {}) {
+    const normalized = {};
+    if (filters.languageCode) {
+      normalized.languageCode = filters.languageCode;
+    }
+    if (filters.rubrique) {
+      normalized.rubrique = filters.rubrique;
+    }
+    if (filters.productRef) {
+      normalized.productRef = filters.productRef;
+    }
+    if (filters.limit) {
+      normalized.limit = filters.limit;
+    }
+    return normalized;
   }
 
   scoreResults(results, variant, session) {

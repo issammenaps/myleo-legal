@@ -291,18 +291,28 @@ class ChatService {
         }
 
         // Use the enhanced search method
-        faqResults = await this.database.searchFaqs(query, filters);
+      faqResults = await this.database.searchFaqs(normalizedQuery, filters);
         
         // If still no results, try a broader search without rubrique filter
-        if (faqResults.length === 0 && filters.rubrique !== 'general') {
+        if (faqResults.length === 0) {
           this.logger.info('No results found with rubrique filter, trying broader search', {
-            originalRubrique: filters.rubrique,
+            originalRubrique: filters.rubrique || 'none',
             query: query.substring(0, 50)
           });
           
           const broaderFilters = { ...filters };
           delete broaderFilters.rubrique; // Remove rubrique filter
           faqResults = await this.database.searchFaqs(query, broaderFilters);
+
+          // If still nothing and product code applied, drop it too
+          if (faqResults.length === 0 && broaderFilters.productRef) {
+            this.logger.info('No results after removing rubrique, dropping product filter', {
+              productRef: broaderFilters.productRef,
+              query: query.substring(0, 50)
+            });
+            delete broaderFilters.productRef;
+            faqResults = await this.database.searchFaqs(query, broaderFilters);
+          }
         }
         
         // Cache results
@@ -317,6 +327,11 @@ class ChatService {
       });
 
       if (faqResults.length === 0) {
+        const keywordFallback = this.getKeywordFallbackResponse(query, session);
+        if (keywordFallback) {
+          return keywordFallback;
+        }
+
         return {
           message: this.language.get('messages.noResults', session.languageCode),
           faqId: null,
@@ -997,6 +1012,67 @@ class ChatService {
     }
     
     // Not a special suggestion
+    return null;
+  }
+
+  /**
+   * Provide deterministic fallback answers for common intents
+   * @param {string} query
+   * @param {Object} session
+   * @returns {Object|null}
+   */
+  getKeywordFallbackResponse(query, session) {
+    const normalized = query.toLowerCase();
+
+    const contactKeywords = ['support', 'contact', 'assistance', 'helpdesk', 'aide'];
+    if (contactKeywords.some(keyword => normalized.includes(keyword))) {
+      return {
+        message: 'Vous pouvez nous contacter via ce chat, par email à contact@myleo.legal ou par téléphone au 05 67 700 484. Nos horaires : du lundi au vendredi de 9h à 18h.',
+        faqId: null,
+        suggestions: [
+          this.language.get('suggestions.moreHelp', session.languageCode),
+          this.language.get('suggestions.contactSupport', session.languageCode)
+        ],
+        canEscalate: true,
+        metadata: {
+          fallback: 'contact_support'
+        }
+      };
+    }
+
+    const hoursKeywords = ['horaire', 'horaires', 'ouverture', 'fermeture'];
+    if (hoursKeywords.some(keyword => normalized.includes(keyword))) {
+      return {
+        message: 'Nos équipes sont disponibles du lundi au vendredi de 9h à 18h (heure de Paris).',
+        faqId: null,
+        suggestions: [
+          this.language.get('suggestions.moreHelp', session.languageCode),
+          this.language.get('suggestions.contactSupport', session.languageCode)
+        ],
+        canEscalate: false,
+        metadata: {
+          fallback: 'business_hours'
+        }
+      };
+    }
+
+    const greetingKeywords = ['bonjour', 'hello', 'salut', 'hi', 'hey', 'bonsoir'];
+    if (greetingKeywords.some(keyword => normalized === keyword || normalized.startsWith(`${keyword} `))) {
+      return {
+        message: 'Bonjour 👋 Comment puis-je vous aider aujourd’hui ? Vous pouvez me poser vos questions sur MyLeo, nos actions collectives, la participation, les contacts ou toute autre information.',
+        faqId: null,
+        suggestions: [
+          'Comment contacter le support ?',
+          'Comment participer à une action ?',
+          'Quels sont vos horaires ?'
+        ],
+        canEscalate: false,
+        metadata: {
+          fallback: 'greeting'
+        }
+      };
+    }
+
     return null;
   }
 

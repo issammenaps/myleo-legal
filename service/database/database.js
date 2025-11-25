@@ -131,8 +131,10 @@ class Database {
     sql += ' ORDER BY last_updated DESC';
 
     if (filters.limit) {
-      sql += ' LIMIT :limit';
-      params.limit = filters.limit;
+      const limitVal = parseInt(filters.limit, 10);
+      if (!isNaN(limitVal) && limitVal > 0) {
+        sql += ` LIMIT ${limitVal}`;
+      }
     }
 
     const result = await this.query(sql, params);
@@ -166,7 +168,7 @@ class Database {
     // FIX 1: Initialize params ONLY with keys used as :placeholders in the SQL
     // (removed normalizedSearch which was causing the first error)
     const params = { 
-      searchTerm: searchTerm
+      searchTerm: normalizedSearch
     };
     
     // Add filters for first query
@@ -628,16 +630,22 @@ class Database {
   }
 
   async getConversationMessages(conversationId, limit = 50) {
-    const sql = `
+    let sql = `
       SELECT cm.*, f.title as faq_title
       FROM chat_messages cm
       LEFT JOIN faqs f ON cm.faq_id = f.id
       WHERE cm.conversation_id = :conversationId
       ORDER BY cm.created_at ASC
-      LIMIT :limit
     `;
 
-    const result = await this.query(sql, { conversationId, limit });
+    const queryParams = { conversationId };
+
+    const limitVal = parseInt(limit, 10);
+    if (!isNaN(limitVal) && limitVal > 0) {
+      sql += ` LIMIT ${limitVal}`;
+    }
+
+    const result = await this.query(sql, queryParams);
     return result.rows;
   }
 
