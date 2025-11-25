@@ -84,9 +84,9 @@ router.post('/start', validateStartConversation, handleValidationErrors, async (
     const conversationParams = {
       language: language || 'fr',
       rubrique: rubrique || 'general',
-      productCode,
-      userIp: req.ip || req.connection.remoteAddress,
-      userAgent: userAgent || req.get('User-Agent')
+      productCode: productCode || null,
+      userIp: req.ip || req.connection?.remoteAddress || null,
+      userAgent: userAgent || req.get('User-Agent') || null
     };
 
     const result = await req.services.chat.startConversation(conversationParams);

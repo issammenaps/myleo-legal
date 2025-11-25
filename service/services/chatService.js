@@ -1,13 +1,14 @@
 const { v4: uuidv4 } = require('uuid');
 
 class ChatService {
-  constructor({ database, cache, language, zendesk, config, logger }) {
+  constructor({ database, cache, language, zendesk, config, logger, ragSearch }) {
     this.database = database;
     this.cache = cache;
     this.language = language;
     this.zendesk = zendesk;
     this.config = config;
     this.logger = logger;
+    this.ragSearch = ragSearch || null;
     
     // In-memory sessions for active conversations
     this.activeSessions = new Map();
@@ -212,7 +213,9 @@ class ChatService {
       this.logger.logChat(sessionId, 'bot', response.message, {
         responseTime: `${responseTime}ms`,
         faqId: response.faqId,
-        foundAnswer: !!response.faqId
+        foundAnswer: !!response.faqId,
+        rag: response.metadata?.rag || false,
+        candidateCount: response.metadata?.totalCandidates || 0
       });
 
       return {
@@ -221,7 +224,9 @@ class ChatService {
         faqId: response.faqId,
         suggestions: response.suggestions || [],
         responseTime: responseTime,
-        canEscalate: !response.faqId // Allow escalation if no FAQ found
+        canEscalate: typeof response.canEscalate === 'boolean' ? response.canEscalate : !response.faqId,
+        sources: response.sources || [],
+        metadata: response.metadata || null
       };
 
     } catch (error) {
@@ -249,6 +254,17 @@ class ChatService {
    * @returns {Object}
    */
   async searchFaqResponse(query, session) {
+    if (this.ragSearch) {
+      const ragResponse = await this.getRagEnhancedResponse(query, session);
+      if (ragResponse) {
+        return ragResponse;
+      }
+    }
+
+    return this.searchFaqResponseLegacy(query, session);
+  }
+
+  async searchFaqResponseLegacy(query, session) {
     try {
       // Normalize query for better caching and matching
       const normalizedQuery = this.normalizeQuery(query);
@@ -347,6 +363,71 @@ class ChatService {
         suggestions: []
       };
     }
+  }
+
+  async getRagEnhancedResponse(query, session) {
+    try {
+      const ragResult = await this.ragSearch.retrieve(query, session);
+      if (!ragResult || !ragResult.topCandidates || ragResult.topCandidates.length === 0) {
+        return null;
+      }
+
+      const candidateRows = ragResult.topCandidates.map(candidate => candidate.row);
+      const primaryMatch = this.findBestQAMatchEnhanced(query, candidateRows, session.languageCode);
+
+      if (!primaryMatch) {
+        return null;
+      }
+
+      const supportingMatches = [];
+      for (const candidate of ragResult.topCandidates) {
+        if (candidate.faqId === primaryMatch.faqId) continue;
+        const supportMatch = this.findBestQAMatchEnhanced(query, [candidate.row], session.languageCode);
+        if (supportMatch && supportMatch.faqId !== primaryMatch.faqId) {
+          supportingMatches.push(supportMatch);
+        }
+      }
+
+      const responseMessage = this.composeRagMessage(primaryMatch, supportingMatches);
+
+      return {
+        message: responseMessage,
+        faqId: primaryMatch.faqId,
+        suggestions: this.getFollowUpSuggestions(session.languageCode),
+        sources: ragResult.topCandidates.map(candidate => ({
+          faqId: candidate.faqId,
+          title: candidate.row.title,
+          rubrique: candidate.row.rubrique,
+          reasons: candidate.sources
+        })),
+        metadata: {
+          rag: true,
+          variantCount: ragResult.variants.length,
+          totalCandidates: ragResult.rankedCandidates.length
+        }
+      };
+    } catch (error) {
+      this.logger.logError(error, {
+        action: 'rag_response',
+        sessionId: session.sessionId
+      });
+      return null;
+    }
+  }
+
+  composeRagMessage(primaryMatch, supportingMatches = []) {
+    let message = primaryMatch.answer;
+
+    if (supportingMatches.length > 0) {
+      const helpfulPoints = supportingMatches
+        .slice(0, 2)
+        .map(match => `• ${match.answer}`)
+        .join('\n');
+
+      message += `\n\nAutres informations utiles :\n${helpfulPoints}`;
+    }
+
+    return message;
   }
 
   /**
@@ -456,12 +537,16 @@ class ChatService {
       'contacter le support',
       'contact support', 
       'joindre le support',
-      'appeler le support'
+      'appeler le support',
+      'comment contacter',
+      'contacter',
+      'puis-je contacter'
     ];
     
     for (const phrase of keyPhrases) {
-      if (query.includes(phrase) && question.includes('contacter') && question.includes('support')) {
-        return 0.85;
+      if ((query.includes(phrase) || phrase.includes(query)) && 
+          (question.includes('contacter') || question.includes('contact'))) {
+        return 0.9;
       }
     }
     
@@ -866,20 +951,28 @@ class ChatService {
     if (normalizedMessage === contactSupportText.toLowerCase() || 
         normalizedMessage.includes('contacter') && normalizedMessage.includes('support')) {
       
-      // Search directly in database for contact support FAQ
+      // Search directly in database for contact support FAQ with broader filters
       const filters = {
         languageCode: session.languageCode,
-        rubrique: session.rubrique,
-        limit: 5
+        limit: 10
       };
       
-      const faqResults = await this.database.searchFaqs('comment contacter support', filters);
+      // Try multiple search terms to find contact support info
+      let faqResults = await this.database.searchFaqs('comment contacter support', filters);
+      
+      if (faqResults.length === 0) {
+        faqResults = await this.database.searchFaqs('contacter', filters);
+      }
+      
+      if (faqResults.length === 0) {
+        faqResults = await this.database.searchFaqs('support', filters);
+      }
       
       // If we found FAQ results, find the best match
       if (faqResults.length > 0) {
         const bestMatch = this.findBestQAMatchEnhanced('comment contacter support', faqResults, session.languageCode);
         
-        if (bestMatch && bestMatch.score >= 0.3) {
+        if (bestMatch && bestMatch.score >= 0.2) { // Lower threshold for contact support
           return {
             message: bestMatch.answer,
             faqId: bestMatch.faqId,
@@ -887,19 +980,19 @@ class ChatService {
               'Créer un ticket support',
               'Autres questions ?'
             ],
-            canEscalate: false
+            canEscalate: true // Allow escalation after showing contact info
           };
         }
       }
       
-      // If no FAQ found, offer to create ticket
+      // Fallback response with direct contact information if no FAQ found
       return {
-        message: 'Je n\'ai pas trouvé d\'informations spécifiques dans notre FAQ. Souhaitez-vous que je crée un ticket support pour vous ? Notre équipe vous contactera rapidement.',
+        message: 'Vous pouvez nous contacter via ce chat, par email à contact@myleo.legal ou par téléphone au 05 67 700 484. Nos horaires : du lundi au vendredi de 9h à 18h.',
         suggestions: [
-          'Oui, créer un ticket',
-          'Non, j\'ai d\'autres questions'
+          'Créer un ticket support',
+          'Autres questions ?'
         ],
-        canEscalate: false
+        canEscalate: true
       };
     }
     

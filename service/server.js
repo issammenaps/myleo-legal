@@ -9,6 +9,7 @@ const config = require('../config/config');
 const logger = require('./utils/logger');
 const Database = require('./database/database');
 const ChatService = require('./services/chatService');
+const RagSearchService = require('./services/ragSearchService');
 const ZendeskService = require('./services/zendeskService');
 const CacheService = require('./services/cacheService');
 const LanguageService = require('./services/languageService');
@@ -103,7 +104,8 @@ class ChatbotServer {
         chat: this.chatService,
         zendesk: this.zendeskService,
         cache: this.cacheService,
-        language: this.languageService
+        language: this.languageService,
+        ragSearch: this.ragSearchService
       };
       next();
     });
@@ -231,6 +233,12 @@ class ChatbotServer {
       this.cacheService = new CacheService(config.cache);
       this.languageService = new LanguageService();
       await this.languageService.loadLanguages();
+      this.ragSearchService = new RagSearchService({
+        database: this.database,
+        cache: this.cacheService,
+        config: config.rag,
+        logger
+      });
       
       this.zendeskService = new ZendeskService(config.zendesk, logger);
       this.chatService = new ChatService({
@@ -239,7 +247,8 @@ class ChatbotServer {
         language: this.languageService,
         zendesk: this.zendeskService,
         config: config.chat,
-        logger
+        logger,
+        ragSearch: this.ragSearchService
       });
 
       logger.info('All services initialized successfully');

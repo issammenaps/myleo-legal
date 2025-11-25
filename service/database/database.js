@@ -151,7 +151,6 @@ class Database {
     
     // Create word variations for better matching
     const searchWords = this.extractSearchWords(normalizedSearch);
-    const wordPatterns = this.createWordPatterns(searchWords);
     
     // Build comprehensive search query with multiple strategies
     let sql = `
@@ -164,9 +163,10 @@ class Database {
       WHERE MATCH(title, meta_keywords, meta_description) AGAINST(:searchTerm IN NATURAL LANGUAGE MODE)
     `;
     
+    // FIX 1: Initialize params ONLY with keys used as :placeholders in the SQL
+    // (removed normalizedSearch which was causing the first error)
     const params = { 
-      searchTerm: searchTerm, // Original term for fulltext search
-      normalizedSearch: normalizedSearch
+      searchTerm: searchTerm
     };
     
     // Add filters for first query
@@ -190,7 +190,6 @@ class Database {
         id, title, language_code, rubrique, product_ref,
         meta_keywords, meta_description, qa_data, last_updated,
         CASE
-          -- Handle both array and single object JSON structures
           WHEN (
             LOWER(JSON_UNQUOTE(JSON_EXTRACT(qa_data, '$.data.question'))) LIKE :exactPattern OR
             LOWER(JSON_UNQUOTE(JSON_EXTRACT(qa_data, '$[*].data.question'))) LIKE :exactPattern
@@ -318,9 +317,12 @@ class Database {
     
     sql += ' ORDER BY relevance DESC, last_updated DESC';
     
+    // FIX 2: Safely interpolate LIMIT as an integer to avoid MySQL2/MySQL 8.0 type bug with LIMIT ?
     if (filters.limit) {
-      sql += ' LIMIT :limit';
-      params.limit = filters.limit;
+      const limitVal = parseInt(filters.limit, 10);
+      if (!isNaN(limitVal)) {
+        sql += ` LIMIT ${limitVal}`;
+      }
     }
     
     const result = await this.query(sql, params);
@@ -329,6 +331,17 @@ class Database {
     const uniqueResults = this.deduplicateAndScore(result.rows, normalizedSearch, searchWords);
     
     return uniqueResults;
+  }
+
+  /**
+   * Build word regex for search matching
+   */
+  buildWordRegex(words) {
+    if (words.length === 0) return '(?!x)x'; // Regex that matches nothing
+    
+    // Create regex that matches any of the words with word boundaries
+    const escapedWords = words.map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    return `\\b(${escapedWords.join('|')})\\b`;
   }
 
   /**
@@ -378,16 +391,6 @@ class Database {
     }).flat();
   }
 
-  /**
-   * Build regex pattern for word matching
-   */
-  buildWordRegex(words) {
-    if (words.length === 0) return '.*'; // Return a pattern that matches nothing meaningful
-    
-    // Create regex that matches any of the words with word boundaries
-    const escapedWords = words.map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    return `\\b(${escapedWords.join('|')})\\b`;
-  }
 
 
   /**
@@ -546,8 +549,10 @@ class Database {
     sql += ' ORDER BY last_updated DESC';
 
     if (filters.limit) {
-      sql += ' LIMIT :limit';
-      params.limit = filters.limit;
+      const limitVal = parseInt(filters.limit, 10);
+      if (!isNaN(limitVal) && limitVal > 0) {
+        sql += ` LIMIT ${limitVal}`;
+      }
     }
 
     const result = await this.query(sql, params);
@@ -566,9 +571,9 @@ class Database {
       sessionId: conversationData.sessionId,
       languageCode: conversationData.languageCode,
       rubrique: conversationData.rubrique,
-      productCode: conversationData.productCode,
-      userIp: conversationData.userIp,
-      userAgent: conversationData.userAgent
+      productCode: conversationData.productCode || null,
+      userIp: conversationData.userIp || null,
+      userAgent: conversationData.userAgent || null
     });
 
     return result.rows.insertId;

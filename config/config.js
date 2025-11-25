@@ -101,6 +101,20 @@ const config = {
     maxSearchResults: parseInt(process.env.CHAT_MAX_SEARCH_RESULTS) || 5
   },
 
+  // Retrieval-Augmented Generation style search configuration
+  rag: {
+    maxQueryVariants: parseInt(process.env.RAG_MAX_VARIANTS) || 4,
+    maxCandidatesPerVariant: parseInt(process.env.RAG_MAX_CANDIDATES) || 12,
+    topKResults: parseInt(process.env.RAG_TOP_K) || 3,
+    minScore: parseFloat(process.env.RAG_MIN_SCORE) || 0.35,
+    cacheTtl: parseInt(process.env.RAG_CACHE_TTL) || 240000, // 4 minutes
+    recencyBoostDays: parseInt(process.env.RAG_RECENCY_DAYS) || 30,
+    rubriqueBoost: parseFloat(process.env.RAG_RUBRIQUE_BOOST) || 0.15,
+    productBoost: parseFloat(process.env.RAG_PRODUCT_BOOST) || 0.2,
+    variantDecay: parseFloat(process.env.RAG_VARIANT_DECAY) || 0.15,
+    fallbackLimit: parseInt(process.env.RAG_FALLBACK_LIMIT) || 5
+  },
+
   // Logging configuration
   logging: {
     level: process.env.LOG_LEVEL || 'info',
