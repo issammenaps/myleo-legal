@@ -1,0 +1,80 @@
+{
+  "widget": {
+    "title": "Assistant Myleo",
+    "placeholder": "Tapez votre message...",
+    "send": "Envoyer",
+    "minimize": "Réduire",
+    "maximize": "Agrandir",
+    "close": "Fermer",
+    "startConversation": "Commencer la conversation",
+    "endConversation": "Terminer la conversation",
+    "poweredBy": "Propulsé par Myleo"
+  },
+  "messages": {
+    "welcome": "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
+    "welcomeProduct": "Bonjour ! J'ai des informations sur {{productName}}. Comment puis-je vous aider ?",
+    "typing": "En train d'écrire...",
+    "noResults": "Désolé, je n'ai pas trouvé de réponse à votre question.",
+    "error": "Une erreur s'est produite. Veuillez réessayer.",
+    "sessionExpired": "Votre session a expiré. Veuillez recommencer.",
+    "maxMessagesReached": "Vous avez atteint le nombre maximum de messages pour cette session.",
+    "messageEmpty": "Veuillez saisir un message.",
+    "messageTooLong": "Votre message est trop long. Veuillez le raccourcir.",
+    "connecting": "Connexion en cours...",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté",
+    "reconnecting": "Reconnexion en cours...",
+    "searchingFaq": "Recherche dans la FAQ..."
+  },
+  "escalation": {
+    "title": "Contacter le support",
+    "subtitle": "Vous n'avez pas trouvé de réponse ? Contactez notre équipe support.",
+    "form": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "subject": "Objet de votre demande",
+      "availability": "Vos créneaux de disponibilité",
+      "submit": "Envoyer la demande",
+      "cancel": "Annuler"
+    },
+    "validation": {
+      "required": "Ce champ est obligatoire",
+      "email": "Veuillez saisir un email valide",
+      "phone": "Veuillez saisir un numéro de téléphone valide"
+    },
+    "success": "Votre demande a été envoyée avec succès. Notre équipe vous contactera bientôt.",
+    "error": "Une erreur s'est produite lors de l'envoi de votre demande. Veuillez réessayer."
+  },
+  "rating": {
+    "title": "Comment évalueriez-vous cette conversation ?",
+    "excellent": "Excellent",
+    "good": "Bien",
+    "average": "Moyen",
+    "poor": "Mauvais",
+    "terrible": "Très mauvais",
+    "thanks": "Merci pour votre retour !"
+  },
+  "time": {
+    "justNow": "À l'instant",
+    "minuteAgo": "Il y a 1 minute",
+    "minutesAgo": "Il y a {{minutes}} minutes",
+    "hourAgo": "Il y a 1 heure",
+    "hoursAgo": "Il y a {{hours}} heures",
+    "dayAgo": "Il y a 1 jour",
+    "daysAgo": "Il y a {{days}} jours"
+  },
+  "errors": {
+    "networkError": "Erreur de réseau. Vérifiez votre connexion internet.",
+    "serverError": "Erreur serveur. Veuillez réessayer plus tard.",
+    "invalidSession": "Session invalide. Veuillez recharger la page.",
+    "rateLimited": "Trop de requêtes. Veuillez attendre avant de réessayer."
+  },
+  "suggestions": {
+    "title": "Suggestions :",
+    "moreHelp": "Avez-vous besoin d'aide sur autre chose ?",
+    "contactSupport": "Contacter le support",
+    "searchFaq": "Rechercher dans la FAQ"
+  }
+}

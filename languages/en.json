@@ -1,0 +1,80 @@
+{
+  "widget": {
+    "title": "Myleo Assistant",
+    "placeholder": "Type your message...",
+    "send": "Send",
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close",
+    "startConversation": "Start conversation",
+    "endConversation": "End conversation",
+    "poweredBy": "Powered by Myleo"
+  },
+  "messages": {
+    "welcome": "Hello! How can I help you today?",
+    "welcomeProduct": "Hello! I have information about {{productName}}. How can I help you?",
+    "typing": "Typing...",
+    "noResults": "Sorry, I couldn't find an answer to your question.",
+    "error": "An error occurred. Please try again.",
+    "sessionExpired": "Your session has expired. Please start again.",
+    "maxMessagesReached": "You have reached the maximum number of messages for this session.",
+    "messageEmpty": "Please enter a message.",
+    "messageTooLong": "Your message is too long. Please shorten it.",
+    "connecting": "Connecting...",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "reconnecting": "Reconnecting...",
+    "searchingFaq": "Searching FAQ..."
+  },
+  "escalation": {
+    "title": "Contact Support",
+    "subtitle": "Didn't find an answer? Contact our support team.",
+    "form": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "subject": "Subject of your request",
+      "availability": "Your availability",
+      "submit": "Send Request",
+      "cancel": "Cancel"
+    },
+    "validation": {
+      "required": "This field is required",
+      "email": "Please enter a valid email",
+      "phone": "Please enter a valid phone number"
+    },
+    "success": "Your request has been sent successfully. Our team will contact you soon.",
+    "error": "An error occurred while sending your request. Please try again."
+  },
+  "rating": {
+    "title": "How would you rate this conversation?",
+    "excellent": "Excellent",
+    "good": "Good",
+    "average": "Average",
+    "poor": "Poor",
+    "terrible": "Terrible",
+    "thanks": "Thank you for your feedback!"
+  },
+  "time": {
+    "justNow": "Just now",
+    "minuteAgo": "1 minute ago",
+    "minutesAgo": "{{minutes}} minutes ago",
+    "hourAgo": "1 hour ago",
+    "hoursAgo": "{{hours}} hours ago",
+    "dayAgo": "1 day ago",
+    "daysAgo": "{{days}} days ago"
+  },
+  "errors": {
+    "networkError": "Network error. Check your internet connection.",
+    "serverError": "Server error. Please try again later.",
+    "invalidSession": "Invalid session. Please reload the page.",
+    "rateLimited": "Too many requests. Please wait before trying again."
+  },
+  "suggestions": {
+    "title": "Suggestions:",
+    "moreHelp": "Do you need help with anything else?",
+    "contactSupport": "Contact Support",
+    "searchFaq": "Search FAQ"
+  }
+}
