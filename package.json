@@ -7,6 +7,9 @@
     "start": "node service/server.js",
     "dev": "nodemon service/server.js",
     "sync": "node scripts/sync-faq-data.js",
+    "scheduler": "node scripts/scheduler.js",
+    "build": "node scripts/build.js",
+    "build:clean": "node scripts/build.js --clean",
     "test": "jest",
     "build-widget": "node scripts/build-widget.js"
   },
@@ -28,6 +31,7 @@
     "helmet": "^7.1.0",
     "joi": "^17.11.0",
     "mysql2": "^3.6.5",
+    "node-cron": "^4.2.1",
     "rate-limiter-flexible": "^4.0.0",
     "uuid": "^9.0.1",
     "winston": "^3.11.0"

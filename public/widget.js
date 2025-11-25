@@ -1,6 +1,25 @@
 (function () {
   'use strict';
 
+  /**
+ * Détecte la langue à partir de l'URL
+ * @returns {string} Code de langue détecté (par défaut: 'fr')
+ */
+  function detectLanguageFromUrl() {
+    try {
+      const url = window.location.href;
+      const pathname = window.location.pathname;
+
+      const langMatch = pathname.match(/\/([a-z]{2})(\/|$)/i);
+      if (langMatch && langMatch[1]) {
+        return langMatch[1].toLowerCase();
+      }
+
+      return 'fr';
+    } catch (error) {
+      return 'fr';
+    }
+  }
   // URL-based rubrique detection
   function detectRubriqueFromUrl() {
     const currentUrl = window.location.href.toLowerCase();
@@ -127,7 +146,7 @@
   // Enhanced widget configuration with URL detection
   const WIDGET_CONFIG = {
     apiBaseUrl: window.MyleoWidgetConfig?.apiUrl || 'http://localhost:3000/api',
-    language: window.MyleoWidgetConfig?.language || 'fr',
+    language: window.MyleoWidgetConfig?.language || detectLanguageFromUrl(),
     rubrique: window.MyleoWidgetConfig?.rubrique || detectRubriqueFromUrl(),
     productCode: window.MyleoWidgetConfig?.productCode || detectProductCodeFromUrl(),
     theme: window.MyleoWidgetConfig?.theme || 'myleo',
