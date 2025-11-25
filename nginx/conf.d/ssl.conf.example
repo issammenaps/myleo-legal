@@ -1,0 +1,77 @@
+# MyLeo Chatbot - HTTPS Configuration (SSL)
+# Uncomment and configure this file when you have SSL certificates
+
+# server {
+#     listen 443 ssl http2;
+#     server_name chatbot.myleo.com;
+# 
+#     # SSL Configuration
+#     ssl_certificate /etc/nginx/ssl/fullchain.pem;
+#     ssl_certificate_key /etc/nginx/ssl/privkey.pem;
+#     
+#     # SSL Security Settings
+#     ssl_protocols TLSv1.2 TLSv1.3;
+#     ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384';
+#     ssl_prefer_server_ciphers off;
+#     ssl_session_cache shared:SSL:10m;
+#     ssl_session_timeout 10m;
+#     
+#     # HSTS (uncomment after testing)
+#     # add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+# 
+#     # Root directory
+#     root /usr/share/nginx/html;
+# 
+#     # Logging
+#     access_log /var/log/nginx/chatbot-ssl-access.log;
+#     error_log /var/log/nginx/chatbot-ssl-error.log;
+# 
+#     # Security headers
+#     add_header X-Frame-Options "SAMEORIGIN" always;
+#     add_header X-Content-Type-Options "nosniff" always;
+#     add_header X-XSS-Protection "1; mode=block" always;
+#     add_header Referrer-Policy "no-referrer-when-downgrade" always;
+# 
+#     # CORS headers
+#     add_header Access-Control-Allow-Origin "*" always;
+#     add_header Access-Control-Allow-Methods "GET, POST, OPTIONS" always;
+#     add_header Access-Control-Allow-Headers "Content-Type, Authorization" always;
+# 
+#     # Health check
+#     location /health {
+#         proxy_pass http://chatbot:3000/health;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $host;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header X-Forwarded-Proto $scheme;
+#         access_log off;
+#     }
+# 
+#     # API endpoints
+#     location /api/ {
+#         proxy_pass http://chatbot:3000/api/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection 'upgrade';
+#         proxy_set_header Host $host;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header X-Forwarded-Proto $scheme;
+#         proxy_cache_bypass $http_upgrade;
+#     }
+# 
+#     # Widget
+#     location /widget.js {
+#         proxy_pass http://chatbot:3000/widget.js;
+#         expires 1h;
+#         add_header Cache-Control "public, max-age=3600";
+#     }
+# 
+#     # Static files
+#     location /public/ {
+#         alias /usr/share/nginx/html/public/;
+#         expires 1d;
+#         add_header Cache-Control "public, max-age=86400";
+#     }
+# }

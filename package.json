@@ -8,10 +8,15 @@
     "dev": "nodemon service/server.js",
     "sync": "node scripts/sync-faq-data.js",
     "scheduler": "node scripts/scheduler.js",
+    "scheduler:worker": "node scripts/scheduler-worker.js",
     "build": "node scripts/build.js",
     "build:clean": "node scripts/build.js --clean",
     "test": "jest",
-    "build-widget": "node scripts/build-widget.js"
+    "build-widget": "node scripts/build-widget.js",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
   },
   "keywords": [
     "chatbot",

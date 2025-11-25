@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
+const { Worker } = require('worker_threads');
 const { RateLimiterMemory } = require('rate-limiter-flexible');
 
 const config = require('../config/config');
@@ -15,12 +16,14 @@ const LanguageService = require('./services/languageService');
 // Import routes
 const chatRoutes = require('./routes/chat');
 const healthRoutes = require('./routes/health');
+const adminRoutes = require('./routes/admin');
 
 class ChatbotServer {
   constructor() {
     this.app = express();
     this.server = null;
     this.database = null;
+    this.schedulerWorker = null;
     this.setupRateLimiter();
     this.setupMiddleware();
     this.setupRoutes();
@@ -112,6 +115,9 @@ class ChatbotServer {
     
     // API routes
     this.app.use('/api/chat', chatRoutes);
+    
+    // Admin routes
+    this.app.use('/admin', adminRoutes);
     
     // Widget endpoint
     this.app.get('/widget.js', (req, res) => {
@@ -238,9 +244,51 @@ class ChatbotServer {
 
       logger.info('All services initialized successfully');
 
+      // Start scheduler in worker thread
+      this.startScheduler();
+
     } catch (error) {
       logger.error('Failed to initialize server:', error);
       process.exit(1);
+    }
+  }
+
+  startScheduler() {
+    try {
+      logger.info('Starting FAQ synchronization scheduler in worker thread...');
+      
+      this.schedulerWorker = new Worker(path.join(__dirname, '../scripts/scheduler-worker.js'), {
+        workerData: {
+          configPath: path.join(__dirname, '../config/config.js')
+        }
+      });
+
+      this.schedulerWorker.on('message', (message) => {
+        if (message.type === 'log') {
+          logger.info(`[SCHEDULER] ${message.message}`);
+        } else if (message.type === 'error') {
+          logger.error(`[SCHEDULER] ${message.message}`, message.error);
+        }
+      });
+
+      this.schedulerWorker.on('error', (error) => {
+        logger.error('Scheduler worker error:', error);
+      });
+
+      this.schedulerWorker.on('exit', (code) => {
+        if (code !== 0) {
+          logger.error(`Scheduler worker stopped with exit code ${code}`);
+          // Restart scheduler after 60 seconds
+          setTimeout(() => {
+            logger.info('Restarting scheduler worker...');
+            this.startScheduler();
+          }, 60000);
+        }
+      });
+
+      logger.info('FAQ synchronization scheduler started successfully');
+    } catch (error) {
+      logger.error('Failed to start scheduler:', error);
     }
   }
 
@@ -257,6 +305,13 @@ class ChatbotServer {
       // Graceful shutdown
       const gracefulShutdown = async (signal) => {
         logger.info(`Received ${signal}, starting graceful shutdown...`);
+        
+        // Stop scheduler worker
+        if (this.schedulerWorker) {
+          logger.info('Stopping scheduler worker...');
+          await this.schedulerWorker.terminate();
+          logger.info('Scheduler worker stopped');
+        }
         
         if (this.server) {
           this.server.close(async () => {

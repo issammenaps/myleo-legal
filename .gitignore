@@ -111,3 +111,21 @@ dist
 # Backup files
 *.bak
 *.backup
+
+# Docker
+docker-compose.override.yml
+
+# SSL Certificates (IMPORTANT - Never commit!)
+nginx/ssl/*.pem
+nginx/ssl/*.key
+nginx/ssl/*.crt
+nginx/ssl/*.cert
+!nginx/ssl/README.md
+
+# Database backups
+*.sql
+*.sql.gz
+backup_*.sql
+
+# PM2
+.pm2/
